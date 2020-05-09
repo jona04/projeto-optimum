@@ -11,9 +11,9 @@ public interface PessoaService {
 	
 	Pessoa salvarPessoa(Pessoa pessoa, Contato contato);
 	
-	void validarCPF(String cpf);
+	void validarCPF(Pessoa pessoa);
 	
-	void validarNascimento(LocalDate nascimento);
+	void validarNascimento(Pessoa pessoa);
 	
 	void validarQuantidadeContato(Contato contato);
 	

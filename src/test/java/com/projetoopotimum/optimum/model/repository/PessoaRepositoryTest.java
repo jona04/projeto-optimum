@@ -6,24 +6,25 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.projetoopotimum.optimum.model.entity.Contato;
 import com.projetoopotimum.optimum.model.entity.Pessoa;
 import com.projetoopotimum.optimum.model.enums.TipoContato;
 
-@SpringBootTest
 @ExtendWith( SpringExtension.class)
+@DataJpaTest
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class PessoaRepositoryTest {
-
 	
 	@Autowired
-	public PessoaRepository pessoaRepository;
-	
-	@Autowired
-	public ContatoRepository contatoRepository;
-	
+	TestEntityManager entityManager;
 	
 	@Test
 	public void devePersistirUmaPessoaNaBaseDeDadosComUmContato() {
@@ -33,11 +34,12 @@ public class PessoaRepositoryTest {
 		Contato contato = criarContato(pessoa);
 		
 		//acao
-		Pessoa pessoaSalva = pessoaRepository.save(pessoa);
-		Contato contatoSalvo = contatoRepository.save(contato);
+		Pessoa pessoaSalva = entityManager.persist(pessoa);
+		Contato contatoSalvo = entityManager.persist(contato);
 		
 		//verificacao
 		Assertions.assertTrue(pessoaSalva.getId() != null);
+		Assertions.assertTrue(contatoSalvo.getId() != null);
 	}
 	
 	

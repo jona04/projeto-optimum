@@ -27,8 +27,8 @@ public class PessoaServiceImpl implements PessoaService {
 	
 	@Override
 	public Pessoa salvarPessoa(Pessoa pessoa, Contato contato) {
-		validarCPF(pessoa.getCpf());
-		validarNascimento(pessoa.getNascimento());
+		validarCPF(pessoa);
+		validarNascimento(pessoa);
 		validarQuantidadeContato(contato);
 		pessoaRepository.save(pessoa);
 		contatoRepository.save(contato);
@@ -37,29 +37,45 @@ public class PessoaServiceImpl implements PessoaService {
 	}
 
 	@Override
-	public void validarCPF(String cpf){
-		
-		if (cpf.length() < 11) {
+	public void validarCPF(Pessoa pessoa){
+		try {
+			if ( pessoa.getCpf().isEmpty() || pessoa.getCpf().length() < 11) {
+				throw new RegraDeNegocioException("Favor informar um CPF válido.");
+			}
+		} catch (Exception e) {
 			throw new RegraDeNegocioException("Favor informar um CPF válido.");
 		}
+		
 		
 		
 	}
 
 	@Override
-	public void validarNascimento(LocalDate nascimento) {
-		int idadeAtual = calcularIdade(nascimento);
-		if (idadeAtual < 18) {
+	public void validarNascimento(Pessoa pessoa) {
+		
+		int idadeAtual = calcularIdade(pessoa.getNascimento());
+		System.out.print(idadeAtual);
+		try {
+			if (idadeAtual < 18) {
+				throw new RegraDeNegocioException("Cadastro apenas para maiores de 18 anos.");
+			}
+		} catch (Exception e) {
 			throw new RegraDeNegocioException("Cadastro apenas para maiores de 18 anos.");
 		}
+		
 		
 	}
 
 	@Override
 	public void validarQuantidadeContato(Contato contato) {
-		if (contato == null) {
+		try {
+			if (contato.getValor().isEmpty()) {
+				throw new RegraDeNegocioException("Você deve informar pelo menos 1 contato.");
+			}
+		} catch (Exception e) {
 			throw new RegraDeNegocioException("Você deve informar pelo menos 1 contato.");
 		}
+		
 	}
 
 	@Override
