@@ -1,34 +1,39 @@
 package com.projetoopotimum.optimum.model.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table( name = "pessoa", schema = "optimum")
+@Table( name = "pessoa")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pessoa {
+@EqualsAndHashCode(callSuper = true)
+public class Pessoa extends BaseEntity {
 	
 	@Id
-	@Column(name = "id")
-	@GeneratedValue( strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@GeneratedValue
+	private int id;
 	
 	@Column(name = "nome")
 	private String nome;
@@ -54,7 +59,10 @@ public class Pessoa {
 	@Column(name = "cep")
 	private String cep;
 
-	@Column(name = "data_cadastro")
-	@Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
-	private LocalDate dataCadastro;
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "pessoa_contato", 
+    		joinColumns = @JoinColumn(name = "contato_id", referencedColumnName = "id" ), 
+    		inverseJoinColumns = @JoinColumn(name = "pessoa_id",referencedColumnName = "id"))
+    private List<Contato> contatos;
+	
 }

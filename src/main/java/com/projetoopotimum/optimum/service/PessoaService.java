@@ -9,13 +9,15 @@ import com.projetoopotimum.optimum.model.entity.Pessoa;
 
 public interface PessoaService {
 	
-	Pessoa salvarPessoa(Pessoa pessoa, Contato contato);
+	Pessoa salvarPessoa(Pessoa pessoa);
 	
 	void validarCPF(Pessoa pessoa);
 	
 	void validarNascimento(Pessoa pessoa);
 	
-	void validarQuantidadeContato(Contato contato);
+	void validarQuantidadeContato(Pessoa pessoa);
+	
+	public List<Pessoa> listarPessoas();
 	
 	List<Pessoa> buscar( Pessoa pessoaFiltro );
 	

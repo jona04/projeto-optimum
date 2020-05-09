@@ -10,9 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
@@ -21,15 +20,17 @@ import com.projetoopotimum.optimum.model.enums.TipoContato;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table( name = "contato", schema = "optimum")
+@Table( name = "contato")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Contato {
+@EqualsAndHashCode(callSuper = true)
+public class Contato extends BaseEntity {
 	
 	@Id
 	@Column(name = "id")
@@ -42,13 +43,5 @@ public class Contato {
 	
 	@Column(name = "valor")
 	private String valor;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_pessoa")
-	private Pessoa pessoa;
-	
-	@Column(name = "data_cadastro")
-	@Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
-	private LocalDate dataCadastro;
 	
 }

@@ -38,7 +38,7 @@ public class PessoaRepositoryTest {
 		Contato contatoSalvo = entityManager.persist(contato);
 		
 		//verificacao
-		Assertions.assertTrue(pessoaSalva.getId() != null);
+		Assertions.assertTrue((Integer)pessoaSalva.getId() != null);
 		Assertions.assertTrue(contatoSalvo.getId() != null);
 	}
 	
@@ -64,7 +64,6 @@ public class PessoaRepositoryTest {
 		Contato contato = Contato.builder()
 				.tipo(TipoContato.EMAIL)
 				.valor("jonatas.iw@gmail.com")
-				.pessoa(pessoa)
 				.build();
 		
 		return contato;

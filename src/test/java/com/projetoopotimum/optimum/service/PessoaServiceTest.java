@@ -29,27 +29,27 @@ public class PessoaServiceTest {
 	@SpyBean
 	public PessoaServiceImpl pessoaService;
 	
-	@Autowired
-	TestEntityManager entityManager;
+//	@Autowired
+//	TestEntityManager entityManager;
 	
-	@Test
-	public void deveSalvarPessoa() {
-		
-		//cenario
-		Pessoa pessoa = criarPessoaComId();
-		Contato contato = criarContatoComId(pessoa);
-
-		//acao
-		Pessoa pessoaSalva = entityManager.persist(pessoa);
-		Contato contatoSalvo = entityManager.persist(contato);
-		
-		//verificacao
-		Assertions.assertTrue(pessoaSalva.getNome().equals("Jonatas"));
-		Assertions.assertTrue(pessoaSalva.getCpf().equals("04454360340"));
-		Assertions.assertTrue(contatoSalvo.getValor().equals("jonatas.iw@gmail.com"));
-		
-		
-	}
+//	@Test
+//	public void deveSalvarPessoa() {
+//		
+//		//cenario
+//		Pessoa pessoa = criarPessoaComId();
+//		Contato contato = criarContatoComId(pessoa);
+//
+//		//acao
+//		Pessoa pessoaSalva = entityManager.persist(pessoa);
+//		Contato contatoSalvo = entityManager.persist(contato);
+//		
+//		//verificacao
+//		Assertions.assertTrue(pessoaSalva.getNome().equals("Jonatas"));
+//		Assertions.assertTrue(pessoaSalva.getCpf().equals("04454360340"));
+//		Assertions.assertTrue(contatoSalvo.getValor().equals("jonatas.iw@gmail.com"));
+//		
+//		
+//	}
 	
 	@Test
 	public void naoDeveSalvarPessoaQuandoCpfInvalido() {
@@ -59,7 +59,7 @@ public class PessoaServiceTest {
 		Contato contato = criarContatoComId(pessoa);
 		
 		//acao
-		Exception exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> pessoaService.salvarPessoa(pessoa, contato));
+		Exception exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> pessoaService.salvarPessoa(pessoa));
 		
 		//verificacao
 		String expectedMessage = "Favor informar um CPF válido.";
@@ -73,10 +73,10 @@ public class PessoaServiceTest {
 		
 		//cenario
 		Pessoa pessoa = Pessoa.builder().cpf("04454360340").nascimento(LocalDate.of(2000,1,17)).build();
-		Contato contato = Contato.builder().valor("").pessoa(pessoa).build();
+		Contato contato = Contato.builder().valor("").build();
 		
 		//acao
-		Exception exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> pessoaService.salvarPessoa(pessoa, contato));
+		Exception exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> pessoaService.salvarPessoa(pessoa));
 		
 		//verificacao
 		String expectedMessage = "Você deve informar pelo menos 1 contato.";
@@ -94,7 +94,7 @@ public class PessoaServiceTest {
 		Contato contato = criarContatoComId(pessoa);
 		
 		//acao
-		Exception exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> pessoaService.salvarPessoa(pessoa, contato));
+		Exception exception = Assertions.assertThrows(RegraDeNegocioException.class, ()-> pessoaService.salvarPessoa(pessoa));
 		
 		//verificacao
 		String expectedMessage = "Cadastro apenas para maiores de 18 anos.";
@@ -125,7 +125,6 @@ public class PessoaServiceTest {
 		Contato contato = Contato.builder()
 				.tipo(TipoContato.EMAIL)
 				.valor("jonatas.iw@gmail.com")
-				.pessoa(pessoa)
 				.build();
 		
 		return contato;

@@ -3,20 +3,26 @@ package com.projetoopotimum.optimum.service.impl;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import com.projetoopotimum.optimum.exception.RegraDeNegocioException;
 import com.projetoopotimum.optimum.model.entity.Contato;
 import com.projetoopotimum.optimum.model.entity.Pessoa;
+import com.projetoopotimum.optimum.model.enums.TipoContato;
 import com.projetoopotimum.optimum.model.repository.ContatoRepository;
 import com.projetoopotimum.optimum.model.repository.PessoaRepository;
+import com.projetoopotimum.optimum.service.ContatoService;
 import com.projetoopotimum.optimum.service.PessoaService;
 
 @Service
-public class PessoaServiceImpl implements PessoaService {
+public class PessoaServiceImpl implements PessoaService, ContatoService {
 
-	
+	@Resource
 	PessoaRepository pessoaRepository;
+	
+	@Resource
 	ContatoRepository contatoRepository;
 	
 	public PessoaServiceImpl(PessoaRepository pessoaRepository, ContatoRepository contatoRepository) {
@@ -26,16 +32,19 @@ public class PessoaServiceImpl implements PessoaService {
 	
 	
 	@Override
-	public Pessoa salvarPessoa(Pessoa pessoa, Contato contato) {
+	public Pessoa salvarPessoa(Pessoa pessoa) {
 		validarCPF(pessoa);
 		validarNascimento(pessoa);
-		validarQuantidadeContato(contato);
-		pessoaRepository.save(pessoa);
-		contatoRepository.save(contato);
-		
-		return pessoa;
+		validarQuantidadeContato(pessoa);
+		validarEmail(pessoa.getContatos());
+		return pessoaRepository.save(pessoa);
 	}
-
+	
+	@Override
+	public List<Pessoa> listarPessoas() {
+		return pessoaRepository.findAll();
+	}
+	
 	@Override
 	public void validarCPF(Pessoa pessoa){
 		try {
@@ -67,13 +76,19 @@ public class PessoaServiceImpl implements PessoaService {
 	}
 
 	@Override
-	public void validarQuantidadeContato(Contato contato) {
+	public void validarQuantidadeContato(Pessoa pessoa) {
 		try {
-			if (contato.getValor().isEmpty()) {
+			if (pessoa.getContatos().size() <  1){
 				throw new RegraDeNegocioException("Você deve informar pelo menos 1 contato.");
 			}
+			
+			for (Contato contato : pessoa.getContatos()) {
+				if (contato.getValor().isEmpty()) {
+					throw new RegraDeNegocioException("Certifique-se de que os contatos estão preenchidos corretamente.");
+				}
+			}
 		} catch (Exception e) {
-			throw new RegraDeNegocioException("Você deve informar pelo menos 1 contato.");
+			throw new RegraDeNegocioException(e.toString());
 		}
 		
 	}
@@ -91,6 +106,25 @@ public class PessoaServiceImpl implements PessoaService {
 		
 		return now.getYear() - nascimento.getYear();
 	}
+
+
+	@Override
+	public void validarEmail(List<Contato> contatos) {
+		for (Contato contato : contatos) {
+			if (contato.getTipo().equals(TipoContato.EMAIL)) {
+				if (!isValid(contato.getValor())) {
+					throw new RegraDeNegocioException("Certifique-se de que os contatos estão preenchidos corretamente.");
+				}
+			}
+		}
+	}
+
+	
+	static boolean isValid(String email) {
+      String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+      return email.matches(regex);
+   }
+	
 	
 	
 }
