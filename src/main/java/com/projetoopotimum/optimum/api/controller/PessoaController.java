@@ -16,12 +16,15 @@ import com.projetoopotimum.optimum.model.repository.PessoaRepository;
 import com.projetoopotimum.optimum.service.PessoaService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://optimum-frontend.herokuapp.com")
 public class PessoaController {
 
 	
 	@Autowired
 	private PessoaService pessoaService;
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
 	
 	public PessoaController(PessoaService pessoaService) {
 		this.pessoaService = pessoaService;
@@ -41,42 +44,10 @@ public class PessoaController {
         return new ResponseEntity<>(ps, HttpStatus.CREATED);
     }
 	
-//	@PostMapping
-//	public ResponseEntity salvar(@RequestBody PessoaDTO dto) {
-//		
-//		
-//		Pessoa pessoa = Pessoa.builder()
-//				.nome(dto.getNome())
-//				.cpf(dto.getCpf())
-//				.nascimento(dto.getNascimento())
-//				.endereço(dto.getEndereco())
-//				.bairro(dto.getBairro())
-//				.cidade(dto.getCidade())
-//				.estado(dto.getEstado())
-//				.cep(dto.getCep())
-//				.build();
-//		
-//		int quantidadeContatos = dto.getContatos().size();
-//		List<Contato> listaContatos = new ArrayList<Contato>()
-//		for (int i = 0; i < quantidadeContatos; i++) {
-//			Contato contato = Contato.builder()
-//					.tipo(TipoContato.valueOf(dto.getContatos().get(i).getTipo()))
-//					.valor(dto.getContatos().get(i).getValor())
-//					.pessoa(pessoa)
-//					.build();
-//			
-//			listaContatos.add(contato);
-//		}
-//		
-//		
-//		try {
-//			Pessoa pessoaSalva = pessoaService.salvarPessoa(pessoa, listaContatos);
-//			return new ResponseEntity(pessoaSalva, HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return ResponseEntity.badRequest().body(e.getMessage());
-//		}
-//	}
-//	
-//	
+	@GetMapping("/pessoas/busca")
+	public ResponseEntity buscar() {
+		List<Pessoa> pessoas = pessoaRepository.findByNome("Jonatas");
+		return ResponseEntity.ok(pessoas);
+	}
 	
 }

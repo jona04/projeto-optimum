@@ -5,7 +5,13 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.projetoopotimum.optimum.exception.RegraDeNegocioException;
 import com.projetoopotimum.optimum.model.entity.Contato;
@@ -32,6 +38,7 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 	
 	
 	@Override
+	@Transactional
 	public Pessoa salvarPessoa(Pessoa pessoa) {
 		validarCPF(pessoa);
 		validarNascimento(pessoa);
@@ -94,9 +101,18 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 	}
 
 	@Override
-	public List<Pessoa> buscar(Pessoa pessoaFiltro) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(readOnly = true)
+	public List<Pessoa> buscar(Pessoa pessoam) {
+		Pessoa lancamentoFiltro = new Pessoa();
+		lancamentoFiltro.setNome("Jonatas");
+		Example example = Example.of(
+				lancamentoFiltro, 
+				ExampleMatcher.matching()
+					.withIgnoreCase()
+					.withStringMatcher(StringMatcher.CONTAINING));
+			
+		
+		return pessoaRepository.findAll(example);
 	}
 
 	
