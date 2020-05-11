@@ -113,4 +113,4 @@ Query utilizada para busca
 
 ## Bugs e Issues abertas
 
-Visualias Issues abertas no gibhub para verificar bugs a resolver.
+Visualiar Issues abertas no gibhub para verificar bugs a resolver.
