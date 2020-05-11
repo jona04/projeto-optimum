@@ -19,6 +19,6 @@ public interface PessoaService {
 	
 	public List<Pessoa> listarPessoas();
 	
-	List<Pessoa> buscar( Pessoa pessoa );
+	List<Pessoa> buscar( String nome );
 	
 }

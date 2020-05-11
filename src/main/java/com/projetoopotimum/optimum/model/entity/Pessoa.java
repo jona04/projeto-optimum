@@ -45,7 +45,7 @@ public class Pessoa extends BaseEntity {
 	private LocalDate nascimento;
 	
 	@Column(name = "endereco")
-	private String endereço;
+	private String endereco;
 	
 	@Column(name = "bairro")
 	private String bairro;

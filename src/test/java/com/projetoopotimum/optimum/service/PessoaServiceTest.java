@@ -111,7 +111,7 @@ public class PessoaServiceTest {
 				.nome("Jonatas")
 				.cpf("04454360340")
 				.nascimento(LocalDate.of(1993,1,17))
-				.endereço("Rua doutor area lao")
+				.endereco("Rua doutor area lao")
 				.bairro("centro")
 				.cidade("Teresina")
 				.estado("Piaui")

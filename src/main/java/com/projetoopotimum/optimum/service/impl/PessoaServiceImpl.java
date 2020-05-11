@@ -101,18 +101,9 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public List<Pessoa> buscar(Pessoa pessoam) {
-		Pessoa lancamentoFiltro = new Pessoa();
-		lancamentoFiltro.setNome("Jonatas");
-		Example example = Example.of(
-				lancamentoFiltro, 
-				ExampleMatcher.matching()
-					.withIgnoreCase()
-					.withStringMatcher(StringMatcher.CONTAINING));
-			
-		
-		return pessoaRepository.findAll(example);
+	@Transactional
+	public List<Pessoa> buscar(String nome) {
+		return pessoaRepository.findByNome(nome);
 	}
 
 	
