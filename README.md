@@ -94,3 +94,23 @@ Adicionar uma Pessoa
 }
 ```
 
+Busca por pessoa
+
+`GET url_base/pessoas/busca?nome=valor_da_busca`
+
+Query utilizada para busca
+
+```
+"SELECT * FROM pessoa "
+			+ "WHERE nome ILIKE %:nome% "
+			+ "or endereco ILIKE %:nome% "
+			+ "or cidade ILIKE %:nome% "
+			+ "or bairro ILIKE %:nome% "
+			+ "or estado ILIKE %:nome% "
+			+ "or cep ILIKE %:nome% "
+			+ "or cpf ILIKE %:nome%"
+```
+
+## Bugs e Issues abertas
+
+Visualias Issues abertas no gibhub para verificar bugs a resolver.
