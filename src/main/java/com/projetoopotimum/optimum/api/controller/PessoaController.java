@@ -30,7 +30,8 @@ public class PessoaController {
 	public PessoaController(PessoaService pessoaService) {
 		this.pessoaService = pessoaService;
 	}
-	
+
+
 	@GetMapping("/pessoas")
     public ResponseEntity<List<Pessoa>> listarTodasPessoas() {
 

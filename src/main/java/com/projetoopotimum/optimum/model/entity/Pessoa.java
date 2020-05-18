@@ -3,17 +3,10 @@ package com.projetoopotimum.optimum.model.entity;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import lombok.AllArgsConstructor;
@@ -39,9 +32,11 @@ public class Pessoa extends BaseEntity {
 	private String nome;
 	
 	@Column(name = "cpf")
+	@CPF
 	private String cpf;
 	
 	@Column(name = "nascimento")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private LocalDate nascimento;
 	
 	@Column(name = "endereco")
@@ -58,6 +53,10 @@ public class Pessoa extends BaseEntity {
 	
 	@Column(name = "cep")
 	private String cep;
+
+	@ManyToOne
+	@JoinColumn(name = "id_usuario")
+	private Usuario usuario;
 
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "pessoa_contato", 
