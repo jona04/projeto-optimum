@@ -20,12 +20,12 @@ public class Usuario extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
-    @NotEmpty(message= "{campo.nome.obrigatorio}")
+    @Column(unique = true, name = "nome")
+    @NotEmpty(message = "Campo nome obrigatório")
     private String nome;
 
-    @Column
-    @NotEmpty(message= "{campo.senha.obrigatorio}")
+    @Column(name = "senha")
+    @NotEmpty(message = "Campo senha obrigatório")
     private String senha;
 
 }

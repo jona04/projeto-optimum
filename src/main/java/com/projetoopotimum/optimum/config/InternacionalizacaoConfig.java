@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import sun.plugin2.message.Message;
 
 import java.util.Locale;
 
@@ -14,15 +13,15 @@ public class InternacionalizacaoConfig {
 
     @Bean
     public MessageSource messageSource(){
-        ReloadableResourceBundleMessageSource msgSource = new ReloadableResourceBundleMessageSource();
-        msgSource.setBasename("classpath:messages");
-        msgSource.setDefaultEncoding("ISO-8859-1");
-        msgSource.setDefaultLocale(Locale.getDefault());
-        return msgSource;
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages");
+        messageSource.setDefaultEncoding("ISO-8859-1");
+        messageSource.setDefaultLocale( Locale.getDefault() );
+        return messageSource;
     }
 
     @Bean
-    public LocalValidatorFactoryBean localValidatorFactoryBean(){
+    public LocalValidatorFactoryBean validatorFactoryBean(){
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource());
         return bean;

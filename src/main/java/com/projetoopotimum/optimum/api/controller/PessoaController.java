@@ -16,7 +16,7 @@ import com.projetoopotimum.optimum.model.entity.Pessoa;
 import com.projetoopotimum.optimum.model.repository.PessoaRepository;
 import com.projetoopotimum.optimum.service.PessoaService;
 
-@RestController
+@RestController("/api/pessoas")
 @CrossOrigin(origins = {"http://localhost:4200", "https://optimum-frontend.herokuapp.com"})
 public class PessoaController {
 
@@ -32,21 +32,21 @@ public class PessoaController {
 	}
 
 
-	@GetMapping("/pessoas")
+	@GetMapping
     public ResponseEntity<List<Pessoa>> listarTodasPessoas() {
 
         List<Pessoa> students = pessoaService.listarPessoas();
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
 	
-	@PostMapping("/pessoa")
+	@PostMapping
     public ResponseEntity<Pessoa> listarTodasPessoas(@RequestBody Pessoa pessoa) {
  
         Pessoa ps = pessoaService.salvarPessoa(pessoa);
         return new ResponseEntity<>(ps, HttpStatus.CREATED);
     }
 	
-	@GetMapping("/pessoas/busca")
+	@GetMapping("/busca")
 	public ResponseEntity buscar(
 			@RequestParam(value = "nome") String nome) {
 		List<Pessoa> pessoas = pessoaService.buscar(nome);
