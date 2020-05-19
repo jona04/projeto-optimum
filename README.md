@@ -27,6 +27,7 @@ CREATE TABLE pessoa (
     cidade character varying(20),
     estado character varying(20),
   	cep character varying(20),
+    id_usuario bigint REFERENCES usuario (id) NOT NULL,
   	created_at timestamp,
   	updated_at timestamp
 );
@@ -47,6 +48,13 @@ CREATE TABLE pessoa_contato (
  PRIMARY KEY (pessoa_id, contato_id)
 );
 
+CREATE TABLE usuario (
+    id serial PRIMARY KEY,
+  	nome character varying(50),
+  	senha character varying(50),
+    created_at timestamp,
+  	updated_at timestamp
+);
 
 CREATE SEQUENCE hibernate_sequence START 1;
 ```
@@ -110,6 +118,13 @@ Query utilizada para busca
 			+ "or cep ILIKE %:nome% "
 			+ "or cpf ILIKE %:nome%"
 ```
+
+## Autenticação JWT com login
+
+Para entrar no sistema é necessário realizar cadastro na tela inicial.
+Ao efetuar o login será feita uma requisição no servidor de autenticação, onde depois de validado os dados do usuário, 
+será retornado um token de acesso. Com esse token armazenado no frontend, o usuário poderá navegar entre as páginas
+da aplicação e realizar requisições na api.
 
 ## Bugs e Issues abertas
 
