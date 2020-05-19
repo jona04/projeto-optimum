@@ -36,7 +36,6 @@ public class Pessoa extends BaseEntity {
 	private String cpf;
 	
 	@Column(name = "nascimento")
-	@JsonFormat(pattern="dd/MM/yyyy")
 	private LocalDate nascimento;
 	
 	@Column(name = "endereco")

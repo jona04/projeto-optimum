@@ -3,6 +3,7 @@ package com.projetoopotimum.optimum.api.dto;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.projetoopotimum.optimum.model.entity.Contato;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +22,10 @@ public class PessoaDTO {
 	private String bairro;
 	private String cidade;
 	private String estado;
+	private String usuario;
 	private String cep;
 	
-	private List<ContatoDTO> contatos;
+	private List<Contato> contatos;
 	
 	
 }

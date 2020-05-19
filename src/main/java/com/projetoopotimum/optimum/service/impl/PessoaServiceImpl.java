@@ -2,9 +2,12 @@ package com.projetoopotimum.optimum.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import com.projetoopotimum.optimum.model.entity.Usuario;
+import com.projetoopotimum.optimum.model.repository.UsuarioRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -30,7 +33,10 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 	
 	@Resource
 	ContatoRepository contatoRepository;
-	
+
+	@Resource
+	UsuarioRepository usuarioRepository;
+
 	public PessoaServiceImpl(PessoaRepository pessoaRepository, ContatoRepository contatoRepository) {
 		this.pessoaRepository = pessoaRepository;
 		this.contatoRepository = contatoRepository;
@@ -48,8 +54,17 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 	}
 	
 	@Override
-	public List<Pessoa> listarPessoas() {
-		return pessoaRepository.findAll();
+	public List<Pessoa> listarPessoas(String nome) {
+		Optional<Usuario> usuario = usuarioRepository.findByNome(nome);
+		if(usuario.isPresent()) {
+			Usuario usu = usuario.get();
+			Integer id = usu.getId();
+			return pessoaRepository.findByUsuario(id);
+		} else {
+			throw new RegraDeNegocioException("Nenhuma pessoa cadastrada");
+		}
+
+
 	}
 	
 	@Override
@@ -70,7 +85,6 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 	public void validarNascimento(Pessoa pessoa) {
 		
 		int idadeAtual = calcularIdade(pessoa.getNascimento());
-		System.out.print(idadeAtual);
 		try {
 			if (idadeAtual < 18) {
 				throw new RegraDeNegocioException("Cadastro apenas para maiores de 18 anos.");

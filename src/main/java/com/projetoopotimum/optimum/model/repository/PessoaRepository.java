@@ -11,7 +11,11 @@ import com.projetoopotimum.optimum.model.entity.Pessoa;
 
 @Repository
 public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
-	
+
+	@Query(value = "SELECT * FROM pessoa "
+			+ "WHERE id_usuario = :id ",nativeQuery = true)
+	List<Pessoa> findByUsuario(Integer id);
+
 	@Query(value = "SELECT * FROM pessoa "
 			+ "WHERE nome ILIKE %:nome% "
 			+ "or endereco ILIKE %:nome% "

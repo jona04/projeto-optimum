@@ -17,7 +17,7 @@ public interface PessoaService {
 	
 	void validarQuantidadeContato(Pessoa pessoa);
 	
-	public List<Pessoa> listarPessoas();
+	public List<Pessoa> listarPessoas(String nome);
 	
 	List<Pessoa> buscar( String nome );
 	

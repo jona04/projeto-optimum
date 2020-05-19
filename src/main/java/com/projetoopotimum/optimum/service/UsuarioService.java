@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UsuarioService implements UserDetailsService {
 
@@ -17,11 +19,18 @@ public class UsuarioService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
 
     public Usuario salvar(Usuario usuario){
-        boolean exist = usuarioRepository.existsByNome(usuario.getNome());
-        if (exist) {
+        if (existeUsuario(usuario.getNome())) {
             throw new UsuarioCadastradoException(usuario.getNome());
         }
         return usuarioRepository.save(usuario);
+    }
+
+    public boolean existeUsuario(String nome){
+        return usuarioRepository.existsByNome(nome);
+    }
+
+    public Optional<Usuario> findUsuario(String nome){
+        return usuarioRepository.findByNome(nome);
     }
 
     @Override

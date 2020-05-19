@@ -2,47 +2,49 @@ package com.projetoopotimum.optimum.api.controller;
 
 import java.util.List;
 
+import com.projetoopotimum.optimum.api.dto.PessoaDTO;
+import com.projetoopotimum.optimum.exception.RegraDeNegocioException;
+import com.projetoopotimum.optimum.model.entity.Usuario;
+import com.projetoopotimum.optimum.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import com.projetoopotimum.optimum.model.entity.Pessoa;
 import com.projetoopotimum.optimum.model.repository.PessoaRepository;
 import com.projetoopotimum.optimum.service.PessoaService;
 
-@RestController("/api/pessoas")
-@CrossOrigin(origins = {"http://localhost:4200", "https://optimum-frontend.herokuapp.com"})
+@RestController
+@RequestMapping("/api/pessoas")
+@RequiredArgsConstructor
 public class PessoaController {
 
-	
-	@Autowired
-	private PessoaService pessoaService;
-	
-	@Autowired
-	private PessoaRepository pessoaRepository;
-	
-	public PessoaController(PessoaService pessoaService) {
-		this.pessoaService = pessoaService;
-	}
 
+	private final PessoaService pessoaService;
+	private final UsuarioService usuarioService;
 
+//	@Autowired
+//	private PessoaRepository pessoaRepository;
+//
 	@GetMapping
-    public ResponseEntity<List<Pessoa>> listarTodasPessoas() {
+    public ResponseEntity<List<Pessoa>> listarTodasPessoas(
+			@RequestParam(value = "nome") String nome
+	) {
 
-        List<Pessoa> students = pessoaService.listarPessoas();
-        return new ResponseEntity<>(students, HttpStatus.OK);
+        List<Pessoa> pessoa = pessoaService.listarPessoas(nome);
+        return new ResponseEntity<>(pessoa, HttpStatus.OK);
     }
-	
+
+
 	@PostMapping
-    public ResponseEntity<Pessoa> listarTodasPessoas(@RequestBody Pessoa pessoa) {
- 
-        Pessoa ps = pessoaService.salvarPessoa(pessoa);
+    public ResponseEntity<Pessoa> salvar(
+    		@RequestBody PessoaDTO dto,
+			@RequestParam("nome") String nome) {
+		Pessoa entidade = converter(dto,nome);
+        Pessoa ps = pessoaService.salvarPessoa(entidade);
         return new ResponseEntity<>(ps, HttpStatus.CREATED);
     }
 	
@@ -52,5 +54,28 @@ public class PessoaController {
 		List<Pessoa> pessoas = pessoaService.buscar(nome);
 		return ResponseEntity.ok(pessoas);
 	}
-	
+
+	private Pessoa converter(PessoaDTO dto, String nome) {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setBairro(dto.getBairro());
+		pessoa.setCep(dto.getCep());
+		pessoa.setCidade(dto.getCidade());
+		pessoa.setEndereco(dto.getEndereco());
+		pessoa.setCpf(dto.getCpf());
+		pessoa.setNascimento(dto.getNascimento());
+		pessoa.setEstado(dto.getEstado());
+		pessoa.setCep(dto.getCep());
+		pessoa.setNome(dto.getNome());
+
+		Usuario usuario = usuarioService
+				.findUsuario(nome)
+				.orElseThrow(()-> new RegraDeNegocioException("Usuário não encontrado com o nome informado"));
+
+		pessoa.setUsuario(usuario);
+
+		pessoa.setContatos(dto.getContatos());
+
+		return pessoa;
+	}
+
 }
