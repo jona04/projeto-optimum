@@ -17,13 +17,14 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Integer> {
 	List<Pessoa> findByUsuario(Integer id);
 
 	@Query(value = "SELECT * FROM pessoa "
-			+ "WHERE nome ILIKE %:nome% "
+			+ "WHERE id_usuario = :id and ("
+			+ "nome ILIKE %:nome% "
 			+ "or endereco ILIKE %:nome% "
 			+ "or cidade ILIKE %:nome% "
 			+ "or bairro ILIKE %:nome% "
 			+ "or estado ILIKE %:nome% "
 			+ "or cep ILIKE %:nome% "
-			+ "or cpf ILIKE %:nome%",nativeQuery = true)
-	List<Pessoa> findByNome(String nome);
+			+ "or cpf ILIKE %:nome%)",nativeQuery = true)
+	List<Pessoa> findByNome(String nome, Integer id);
 	
 }

@@ -116,8 +116,16 @@ public class PessoaServiceImpl implements PessoaService, ContatoService {
 
 	@Override
 	@Transactional
-	public List<Pessoa> buscar(String nome) {
-		return pessoaRepository.findByNome(nome);
+	public List<Pessoa> buscar(String nome, String nomeUsuario) {
+		Optional<Usuario> usuario = usuarioRepository.findByNome(nomeUsuario);
+		if(usuario.isPresent()) {
+			Usuario usu = usuario.get();
+			Integer id = usu.getId();
+			return pessoaRepository.findByNome(nome, id);
+		} else {
+			throw new RegraDeNegocioException("Nenhuma pessoa encontrada");
+		}
+
 	}
 
 	

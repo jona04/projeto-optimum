@@ -50,8 +50,9 @@ public class PessoaController {
 	
 	@GetMapping("/busca")
 	public ResponseEntity buscar(
-			@RequestParam(value = "nome") String nome) {
-		List<Pessoa> pessoas = pessoaService.buscar(nome);
+			@RequestParam(value = "nome") String nome,
+			@RequestParam(value = "nomeUsuario") String nomeUsuario) {
+		List<Pessoa> pessoas = pessoaService.buscar(nome, nomeUsuario);
 		return ResponseEntity.ok(pessoas);
 	}
 
